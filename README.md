@@ -2,9 +2,9 @@ BÀI TẬP: HỆ THỐNG QUẢN LÝ XE Ô TÔ ĐIỆN (JAVA)
 1. Thông tin nhóm
 Lớp: [OOAD IT25M]
 Nhóm: [13]
-Họ và tên
-Đỗ Văn Hậu
-Triệu Quang Mười
+Họ và tên:
+1.Đỗ Văn Hậu
+2.Triệu Quang Mười.
 2. Mục tiêu đề tài
 Xây dựng ứng dụng quản lý xe ô tô điện nhằm áp dụng các kiến thức cốt lõi của môn Phân tích Thiết kế Hướng đối tượng (OOAD) & Lập trình Hướng đối tượng (OOP) với Java:
 Áp dụng 4 tính chất: Kế thừa (Inheritance), Đóng gói (Encapsulation), Đa hình (Polymorphism), Trừu tượng (Abstraction).
