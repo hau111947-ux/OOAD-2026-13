@@ -43,29 +43,3 @@ Ngôn ngữ: Java (JDK 17+)
 Quản lý mã nguồn: Git, GitHub
 Lưu trữ: File I/O (Text File / Object Serialization)
 6. ![Sơ đồ Use-Case](usecase-diagram.png)
-7. Đặc tả Use-Case (Use-Case Specification)
-Đặc tả UC05: Vận hành sạc pin xe điện
-Mã Use-Case: UC05
-Tên Use-Case: Vận hành sạc pin xe điện
-Actor: Nhân viên / Quản trị
-Mục đích: Khởi tạo phiên sạc pin cho xe ô tô điện tại trạm sạc, theo dõi quá trình sạc và tính phí dịch vụ.
-Tiền điều kiện (Pre-conditions):
-Nhân viên đã đăng nhập vào hệ thống.
-Xe ô tô điện đang ở trạng thái Rảnh hoặc Cần sạc và mức pin hiện tại < 100%.
-Trạm sạc đang ở trạng thái sẵn sàng kết nối.
-Hậu điều kiện (Post-conditions):
-Mức pin của xe tăng lên theo thời gian sạc (tối đa 100%).
-Trạng thái xe được cập nhật về Rảnh.
-Hệ thống lưu lại lịch sử phiên sạc và doanh thu.
-Luồng sự kiện chính (Basic Flow):
-Nhân viên chọn chức năng "Quản lý sạc pin".
-Hệ thống hiển thị danh sách các xe đủ điều kiện và các cổng sạc khả dụng (AC/DC).
-Nhân viên chọn mã xe, chọn cổng sạc và nhập mức pin cần nạp (hoặc thời lượng sạc).
-Hệ thống chuyển trạng thái xe sang Đang sạc và thực hiện mô phỏng quá trình sạc pin.
-Khi hoàn tất, hệ thống cập nhật mức % pin mới cho xe.
-Hệ thống tính tiền theo công thức: Số tiền = Số kWh nạp × Đơn giá.
-Hệ thống chuyển trạng thái xe về Rảnh, xuất thông tin hóa đơn và lưu vào lịch sử giao dịch.
-Luồng sự kiện thay thế (Alternative Flow):
-4a. Dừng sạc khẩn cấp: Nhân viên chủ động ngắt sạc giữa chừng. Hệ thống ghi nhận mức pin đạt được tại thời điểm ngắt và tính tiền theo số kWh thực tế đã nạp.
-Ngoại lệ (Exception Flow):
-3a. Xe đã đầy pin (100%): Hệ thống cảnh báo pin đã đầy, từ chối phiên sạc và quay lại màn hình chính.
