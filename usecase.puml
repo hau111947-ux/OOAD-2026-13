@@ -1,0 +1,32 @@
+@startuml UseCase_ElectricCarManagement
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Nhân viên / Quản trị" as Staff
+
+rectangle "Hệ thống Quản lý Xe Ô tô Điện" {
+  usecase "Đăng nhập hệ thống" as UC_Login
+  usecase "Quản lý thông tin xe điện" as UC_ManageCars
+  usecase "Tìm kiếm & Lọc xe" as UC_SearchCars
+  usecase "Cảnh báo pin yếu (<20%)" as UC_AlertBattery
+  usecase "Vận hành sạc pin" as UC_Charge
+  usecase "Tính phí sạc điện" as UC_CalcChargeCost
+  usecase "Quản lý thuê xe" as UC_RentCar
+  usecase "Tính phí thuê xe" as UC_CalcRentCost
+  usecase "Quản lý khách hàng" as UC_ManageCustomer
+  usecase "Xem báo cáo & Thống kê" as UC_Report
+}
+
+Staff --> UC_Login
+Staff --> UC_ManageCars
+Staff --> UC_SearchCars
+Staff --> UC_AlertBattery
+Staff --> UC_Charge
+Staff --> UC_RentCar
+Staff --> UC_ManageCustomer
+Staff --> UC_Report
+
+UC_Charge ..> UC_CalcChargeCost : <>
+UC_RentCar ..> UC_CalcRentCost : <>
+UC_AlertBattery ..> UC_SearchCars : <>
+@enduml
