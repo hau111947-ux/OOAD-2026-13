@@ -42,7 +42,7 @@ src/
 Ngôn ngữ: Java (JDK 17+)
 Quản lý mã nguồn: Git, GitHub
 Lưu trữ: File I/O (Text File / Object Serialization)
-6. Sơ đồ Use-Case (Use-Case Diagram)
+6. ![Sơ đồ Use-Case](usecase-diagram.png)
 7. Đặc tả Use-Case (Use-Case Specification)
 Đặc tả UC05: Vận hành sạc pin xe điện
 Mã Use-Case: UC05
