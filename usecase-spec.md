@@ -1,4 +1,36 @@
-ĐẶC TẢ USE-CASE
-HỆ THỐNG QUẢN LÝ XE Ô TÔ ĐIỆN
-
-1. Đặc tả UC05: Vận hành sạc pin xe điệnMã Use-Case: UC05Tên Use-Case: Vận hành sạc pin xe điệnActor: Nhân viên / Quản trị viênMô tả: Nhân viên thực hiện cắm sạc cho xe ô tô điện tại trạm sạc, hệ thống mô phỏng tiến trình nạp pin và tự động tính toán chi phí sạc.Tiền điều kiện (Pre-conditions):Nhân viên đã đăng nhập thành công vào hệ thống.Xe ô tô điện đang ở trạng thái Rảnh hoặc Cần sạc và mức pin hiện tại < 100%.Trạm sạc đang hoạt động và cổng sạc (AC/DC) khả dụng.Hậu điều kiện (Post-conditions):Mức pin của xe được cập nhật tương ứng với năng lượng nạp.Trạng thái xe chuyển về Rảnh.Hệ thống ghi nhận lịch sử phiên sạc và tổng chi phí nạp điện.Luồng sự kiện chính (Basic Flow):Nhân viên chọn chức năng Vận hành sạc pin trên menu.Hệ thống hiển thị danh sách các xe cần sạc và các trạm sạc đang sẵn sàng.Nhân viên chọn mã xe, mã trạm sạc và chỉ định lượng pin mục tiêu (hoặc thời gian sạc).Hệ thống chuyển trạng thái xe sang Đang sạc.Hệ thống mô phỏng quá trình sạc pin dựa trên công suất trạm sạc (kW) và dung lượng pin xe (kWh).Khi đạt mức pin yêu cầu, hệ thống kết thúc sạc và cập nhật mức % pin mới cho xe.Hệ thống tính chi phí theo công thức:$$\text{Thành tiền} = \text{Số kWh nạp} \times \text{Đơn giá trạm sạc}$$Hệ thống lưu thông tin vào lịch sử giao dịch và chuyển trạng thái xe về Rảnh.Luồng sự kiện thay thế (Alternative Flow):5a. Dừng sạc thủ công: Nhân viên có thể bấm dừng sạc bất kỳ lúc nào. Hệ thống ngắt phiên sạc, cập nhật mức pin tại thời điểm dừng và tính tiền theo lượng điện thực tế đã nạp.Ngoại lệ (Exception Flow):3a. Xe đã đầy pin (100%): Hệ thống báo lỗi "Xe đã đầy pin, không thể sạc thêm" và quay về menu quản lý.3b. Trạm sạc đang bận hoặc hỏng: Hệ thống hiển thị cảnh báo và yêu cầu chọn trạm sạc khác.2. Đặc tả UC06: Quản lý thuê xe ô tô điệnMã Use-Case: UC06Tên Use-Case: Quản lý thuê xe ô tô điệnActor: Nhân viên / Quản trị viênMô tả: Tiếp nhận thông tin khách hàng, kiểm tra tính hợp lệ của xe và khách hàng, tạo hợp đồng thuê xe và cập nhật trạng thái vận hành.Tiền điều kiện (Pre-conditions):Nhân viên đã đăng nhập vào hệ thống.Xe ô tô điện được chọn đang ở trạng thái Rảnh và mức pin >= 20%.Khách hàng đã có hồ sơ trong hệ thống (hoặc được tạo mới) với bằng lái xe hợp lệ.Hậu điều kiện (Post-conditions):Hợp đồng thuê xe mới được lưu vào hệ thống.Trạng thái của xe được chuyển sang Đang cho thuê.Luồng sự kiện chính (Basic Flow):Nhân viên chọn chức năng Tạo hợp đồng thuê xe.Hệ thống yêu cầu nhập hoặc tìm kiếm mã khách hàng (CCCD/SĐT).Nhân viên chọn khách hàng từ danh sách.Hệ thống hiển thị danh sách các xe đang Rảnh và có pin >= 20%.Nhân viên chọn mã xe cần thuê và nhập thời gian thuê dự kiến.Hệ thống kiểm tra thông tin, ghi nhận % pin tại thời điểm giao xe.Hệ thống tạo mã hợp đồng mới, lưu dữ liệu và chuyển trạng thái xe sang Đang cho thuê.Hệ thống xuất thông báo tạo hợp đồng thành công và in thông tin hợp đồng.Ngoại lệ (Exception Flow):4a. Xe có mức pin < 20%: Hệ thống hiển thị cảnh báo pin yếu, từ chối cho thuê và yêu cầu đưa xe đi sạc trước.2a. Khách hàng chưa đủ điều kiện bằng lái: Hệ thống từ chối lập hợp đồng và yêu cầu kiểm tra lại hạng giấy phép lái xe.
+1. Lập hợp đồng thuê xe (UC_Rent)
+* **Actor:** Nhân viên bán hàng.
+* **Điều kiện tiên quyết:** Khách hàng có bằng lái hợp lệ; Xe đang `Rảnh` và mức pin \(\ge 50\%\).
+* **Luồng sự kiện chính:**
+  1. Nhân viên nhập mã khách hàng và mã xe cần thuê.
+  2. Hệ thống kiểm tra điều kiện: Bằng lái hợp lệ và xe `Rảnh` có pin \(\ge 50\%\).
+  3. Nhập thời gian thuê, đơn giá và ghi nhận % pin lúc bàn giao.
+  4. Hệ thống tạo hợp đồng, tự động chuyển xe sang trạng thái `Đang cho thuê`.
+* **Luồng rẽ nhánh:** Nếu pin \(< 50\%\) hoặc xe bận, hệ thống từ chối tạo hợp đồng và báo lỗi.
+2. Tiếp nhận trả xe & Thanh toán (UC_Return)
+Actor: Nhân viên bán hàng.
+Điều kiện tiên quyết: Hợp đồng thuê xe đang có hiệu lực.
+Luồng sự kiện chính:Chọn mã hợp đồng cần kết thúc.
+Nhập % pin thực tế khi nhận lại xe và thời gian trả.
+Hệ thống tính tổng tiền thuê xe (kèm phụ phí nếu có).
+Xác nhận thanh toán, đóng hợp đồng và chuyển xe về trạng thái Rảnh.
+Luồng rẽ nhánh: Nếu % pin lúc trả $< 20\%$, hệ thống tự động gắn cờ cảnh báo pin yếu.
+3. Thực hiện sạc xe điện (UC_Charge)Actor: Nhân viên kỹ thuật.
+Điều kiện tiên quyết: Xe đang Rảnh (hoặc pin $< 20\%$); Trạm sạc sẵn sàng.
+Luồng sự kiện chính:Chọn xe cần sạc và trạm sạc khả dụng.
+Hệ thống chuyển trạng thái xe sang Đang sạc.
+Nhập % pin cần nạp thêm; hệ thống mô phỏng quá trình sạc
+Tự động tính tiền điện: $\text{Tiền sạc} = \text{Số kWh nạp} \times \text{Đơn giá trạm}$.
+Hoàn tất sạc, lưu lịch sử phiên sạc và chuyển xe về trạng thái Rảnh.
+Luồng rẽ nhánh: Trạm sạc đang bận thì yêu cầu kỹ thuật viên chọn trụ khác.
+4. Cảnh báo xe pin yếu (UC_Alert)Actor: Nhân viên kỹ thuật
+Điều kiện tiên quyết: Mở màn hình tra cứu/giám sát đội xe.
+Luồng sự kiện chính:Hệ thống tự động quét danh sách phương tiện.
+Phát hiện và lọc các xe có mức pin $< 20\%$.
+Hiển thị danh sách cảnh báo để kỹ thuật viên ưu tiên cắm sạc.
+5. Quản lý đội xe (UC_ManageCars)Actor: Quản lý (Manager).
+Điều kiện tiên quyết: Đăng nhập tài khoản quyền Quản lý.
+Luồng sự kiện chính:
+Thêm xe: Nhập thông tin xe (Mã xe, biển số, hãng, dung lượng pin); hệ thống kiểm tra không trùng lặp và lưu với trạng thái Rảnh.
+Sửa/Xóa: Chọn xe cần cập nhật thông số hoặc thanh lý khỏi hệ thống.
+Luồng rẽ nhánh: Không cho phép xóa xe đang trong trạng thái Đang cho thuê.
