@@ -2,7 +2,7 @@ BÀI TẬP NHÓM
 Học phần: Phân tích và Thiết kế Hướng đối tượng (OOAD)
 Tên đề tài: Hệ Thống Quản Lý Xe Ô Tô Điện (Java)  
 Lớp: OOAD IT25M | Nhóm: 13
-Thành viên nhóm:   
+Thành viên nhóm:  
 1.Đỗ Văn Hậu   
 2.Triệu Quang Mười   
 NỘI DUNG:
