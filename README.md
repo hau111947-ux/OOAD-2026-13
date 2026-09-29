@@ -19,7 +19,7 @@ Phiên sạc (ChargingSession): Mã phiên, xe nạp, trạm sạc, kWh tiêu th
 5. 1.4. Yêu cầu hệ thống tóm tắt
 Chức năng (FR): CRUD xe điện; Tra cứu & Lọc xe; Cảnh báo pin $< 20\%$; Mô phỏng sạc & tính tiền điện; Quản lý khách hàng & Hợp đồng thuê xe; Báo cáo doanh thu & Trạng thái xe; Đọc/ghi File I/O.
 Phi chức năng (NFR): Ràng buộc dữ liệu (pin $0 - 100\%$, SĐT 10 số); Thiết kế chuẩn kiến trúc 3 lớp (Model - Service - Repository); Bắt lỗi ngoại lệ tránh crash.
-6. 2. Biểu đồ Use Case (Use Case Diagram)
+6. 2. Biểu đồ Use Case (Use Case Diagram) ![Sơ đồ Use Case](use%20case.png)
 Đặc tả Use Case tiêu biểu: Lập hợp đồng thuê xeActor: Nhân viên bán hàng.
 Điều kiện tiên quyết: Khách có bằng lái hợp lệ; Xe đang Rảnh và mức pin $\ge 50\%$.
 Các bước thực hiện:Chọn xe và khách hàng thuê.
