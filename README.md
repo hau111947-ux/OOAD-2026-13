@@ -2,9 +2,8 @@
 **Học phần:** Phân tích và Thiết kế Hướng đối tượng (OOAD)  
 **Lớp:** OOAD IT25M | **Nhóm:** 13  
 **Thành viên thực hiện:**
-1. Đỗ Văn Hậu
-2. Triệu Quang Mười
-
+Đỗ Văn Hậu
+Triệu Quang Mười
 1. Phát biểu bài toán và Nghiệp vụ hệ thống
 1.1. Hiện trạng và Đặt vấn đề
 - Sự chuyển dịch từ phương tiện sử dụng nhiên liệu hóa thạch sang xe thuần điện mang lại nhiều lợi ích về môi trường nhưng đồng thời đặt ra thách thức lớn trong khâu quản lý vận hành. Khác với dòng xe truyền thống chỉ mất vài phút để đổ xăng, việc khai thác xe điện gắn liền chặt chẽ với tình trạng dung lượng pin, thời gian nạp xả, công suất của hạ tầng trạm sạc và phạm vi di chuyển an toàn còn lại trước mỗi hành trình.
