@@ -1,5 +1,5 @@
-# BÀI TẬP RIÊNG: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG QUẢN LÝ NHÀ HÀNG IT25
-**Học phần:** Phân tích và Thiết kế Hướng đối tượng (OOAD)  
+# BÀI TẬP IT25M: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG QUẢN LÝ NHÀ HÀNG IT25
+**Học phần:** Phân tích và Thiết kế Hướng đối tượng (OOAD) - Lớp IT25M  
 **Đơn vị áp dụng:** Nhà hàng IT25  
 
 ---
