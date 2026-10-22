@@ -70,3 +70,89 @@ Sơ đồ Use Case tổng thể của hệ thống được tự vẽ bằng ph�
 Sơ đồ Lớp mô hình hóa cấu trúc tĩnh của hệ thống được thiết kế bằng StarUML:
 
 ![Biểu đồ Lớp](class-diagram1.png)
+
+---
+
+## V. Biểu đồ Trạng thái (State Diagram)
+
+### 1. Đối tượng mô hình hóa: Xe Ô Tô Điện (`XeOToDien`)
+Trong hệ thống quản lý nhà xe, thực thể `XeOToDien` đóng vai trò là lớp có nhiều hành vi động và chu kỳ biến đổi trạng thái phong phú nhất: từ khi nhập bãi, sẵn sàng phục vụ, xuất xưởng cho thuê, đối soát nghiệm thu, cảnh báo pin yếu, nạp điện tại trụ sạc cho đến khi bảo trì kỹ thuật.
+
+### 2. Sơ đồ Trạng thái (State Diagram)
+
+```mermaid
+stateDiagram-v2
+    [*] --> Ranh: Tiếp nhận xe vào bãi [Pin >= 50%]
+
+    state Ranh {
+        entry / kiemTraPinVaVeSinh()
+        do / hienThiTrangThai("Sẵn sàng")
+    }
+
+    state DangChoThue {
+        entry / khoaTrangThaiXe(), banGiao()
+        do / giamSatHanhTrinh()
+        exit / moKhoaXe()
+    }
+
+    state NghiemThu {
+        entry / docPhanTramPin(), docOdo()
+        do / tinhToanChiPhiThue()
+    }
+
+    state PinYeu {
+        entry / phatTinHieuCanhBaoPin()
+        do / dieuPhoiVaoKhuVucSac()
+    }
+
+    state DangSac {
+        entry / ketNoiTruSac(), khoiTaoPhienSac()
+        do / moPhongNapDien(), doLuongKWh()
+        exit / ngatTruSac(), chotChiPhiDien()
+    }
+
+    state BaoTri {
+        entry / lapPhieuKyThuat()
+        do / kiemDinhCellPinVaBaoDuong()
+    }
+
+    state NgungKhaiThac {
+        entry / lapBienBanThanhLy()
+    }
+
+    Ranh --> DangChoThue: lapHopDongThue() [coTheThue() == true] / capNhatTrangThai(1)
+    DangChoThue --> NghiemThu: khachTraXe() / ghiNhanThoiGianTra()
+
+    NghiemThu --> Ranh: thanhToanXong() [Pin >= 50%] / veSinhVaDuaVeBai()
+    NghiemThu --> DangSac: thanhToanXong() [20% <= Pin < 50%] / duaVaoTruSac()
+    NghiemThu --> PinYeu: thanhToanXong() [Pin < 20%] / kichHoatCanhBaoKhanCap()
+
+    PinYeu --> DangSac: camVaoTruSac() / batDauPhienSac()
+    DangSac --> Ranh: hoanTatSac() [Pin >= 80%] / capNhatPinMoi()
+
+    Ranh --> BaoTri: phatHienSuCo() / chuyenVaoXuong()
+    DangChoThue --> BaoTri: gapSuCoKyThuatTrenDuong() / cuXeCuuHo()
+    BaoTri --> DangSac: suaChuaXong() [Pin < 50%] / chuyenSangNapPin()
+    BaoTri --> Ranh: baoDuongXong() [Pin >= 50%] / kiemDinhDat()
+
+    BaoTri --> NgungKhaiThac: khongThePhucHoi() / hetNienHan()
+    NgungKhaiThac --> [*]
+```
+
+### 3. Bảng giải thích chi tiết các Trạng thái và Sự kiện chuyển đổi
+
+| Trạng thái nguồn | Sự kiện kích hoạt (Event) | Điều kiện canh gác (Guard) | Hành động (Action) | Trạng thái đích | Ý nghĩa nghiệp vụ |
+|:---|:---|:---|:---|:---|:---|
+| **[*]** | `nhapXeMoi()` | `[Pin >= 50%]` | Tiếp nhận xe | **Rảnh** | Xe mới đưa vào bãi, kiểm tra đạt dung lượng pin an toàn. |
+| **Rảnh** | `lapHopDongThue()` | `[coTheThue() == true]` *(Pin $\ge 50\%$ & Rảnh)* | Khóa trạng thái xe | **Đang cho thuê** | Bàn giao phương tiện an toàn cho khách hàng. |
+| **Đang cho thuê** | `khachTraXe()` | - | Nghiệm thu | **Nghiệm thu** | Khách hoàn trả xe, đối soát % pin và cự ly di chuyển. |
+| **Nghiệm thu** | `thanhToanXong()` | `[Pin >= 50%]` | Đưa về bãi đỗ | **Rảnh** | Pin còn nhiều, xe sẵn sàng cho đợt thuê tiếp theo. |
+| **Nghiệm thu** | `thanhToanXong()` | `[20% <= Pin < 50%]` | Cắm trụ sạc | **Đang sạc** | Mức pin chưa đủ tiêu chuẩn xuất xưởng ($< 50\%$), cần sạc bổ sung. |
+| **Nghiệm thu** | `thanhToanXong()` | `[Pin < 20%]` | Kích hoạt còi/cảnh báo | **Pin yếu** | Pin tụt dưới ngưỡng an toàn, báo động khẩn cấp bảo vệ cell pin. |
+| **Pin yếu** | `camVaoTruSac()` | - | Khởi tạo `PhienSac` | **Đang sạc** | Điều phối xe vào trụ sạc AC/DC để nạp điện khẩn cấp. |
+| **Đang sạc** | `hoanTatSac()` | `[Pin >= 80%]` | Ngắt trụ sạc, tính tiền | **Rảnh** | Xe nạp đủ pin an toàn, đưa về vị trí đỗ sẵn sàng phục vụ. |
+| **Rảnh / Đang thuê** | `phatHienSuCo()` | - | Chuyển xưởng kỹ thuật | **Bảo trì** | Xe gặp sự cố kỹ thuật hoặc đến kỳ bảo dưỡng định kỳ. |
+| **Bảo trì** | `baoDuongXong()` | `[Pin >= 50%]` | Xuất xưởng lại | **Rảnh** | Xe sửa chữa xong và pin đủ an toàn, hoàn trả đội xe. |
+| **Bảo trì** | `khongThePhucHoi()` | `[Hết niên hạn]` | Lập biên bản | **Ngừng khai thác** | Xe hư hỏng nặng hoặc hết khấu hao sử dụng. |
+| **Ngừng khai thác** | `thanhLy()` | - | Xuất kho thanh lý | **[*]** | Kết thúc hoàn toàn vòng đời của phương tiện. |
+
