@@ -1,257 +1,159 @@
 # BÀI TẬP IT25M: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG QUẢN LÝ NHÀ HÀNG IT25
-**Học phần:** Phân tích và Thiết kế Hướng đối tượng (OOAD) - Lớp IT25M  
+
+**Học phần:** Phân tích và Thiết kế Hướng đối tượng (OOAD) — Lớp IT25M  
 **Đơn vị áp dụng:** Nhà hàng IT25  
 
 ---
 
 ## I. Sơ đồ Ca sử dụng (Use Case Diagram)
 
-### 1. Bảng xác định Tác nhân (Actors) và Ca sử dụng (Use Cases)
-* **Tác nhân (Actors):**
-  1. **Nhân viên thu ngân (Thu ngân):** Tiếp đón khách, nhập thông tin gọi món (số bàn, tên khách, món ăn, ghi chú), thêm/xóa/sửa món theo yêu cầu, thanh toán hóa đơn (tiền mặt / chuyển khoản), thực hiện kiểm toán và đối soát nộp tiền cuối ngày.
-  2. **Quản lý nhà hàng (Quản lý):** Quản lý danh mục thực đơn (đồ ăn, đồ uống), quản lý thông tin nhân viên, nhận bàn giao tiền kiểm toán cuối ngày, tra cứu và xem thống kê báo cáo (doanh thu, lượt khách, món bán chạy).
-  3. **Khách hàng:** Liên hệ đặt bàn và đặt món trước, thực hiện gọi món và thanh toán.
+> **Lưu ý:** Mỗi sơ đồ vẽ cho 1 actor để gọn.  
+> Ranh giới hệ thống (System Boundary) ghi rõ **"Hệ thống Quản lý Nhà hàng IT25"**.  
+> Các ca sử dụng bắt đầu bằng **động từ**.  
+> Có quan hệ **«include»** và **«extend»** giữa các ca sử dụng.
 
-* **Danh mục các Ca sử dụng chính:**
-  - `UC01`: Quản lý thực đơn (Đồ ăn & Đồ uống)
-  - `UC02`: Quản lý nhân viên
-  - `UC03`: Đặt bàn và đặt món trước
-  - `UC04`: Tiếp nhận gọi món tại bàn
-  - `UC05`: Điều chỉnh món ăn (Thêm, xóa, sửa món) *(<<extend>> từ Tiếp nhận gọi món)*
-  - `UC06`: Thanh toán hóa đơn (Tiền mặt / Chuyển khoản ngân hàng)
-  - `UC07`: Kiểm toán và đối soát tiền cuối ngày
-  - `UC08`: Thống kê báo cáo (Doanh thu, lượt khách, món bán theo ngày/tuần/tháng)
+### 1. Sơ đồ cho Actor: Nhân viên Thu ngân & Khách hàng
+
+![Sơ đồ Use Case - Thu ngân và Khách hàng](usecase-thungan.png)
+
+### 2. Sơ đồ cho Actor: Quản lý nhà hàng
+
+![Sơ đồ Use Case - Quản lý nhà hàng](usecase-quanly.png)
 
 ---
 
-### 2. Sơ đồ Use Case tổng thể
+## II. Đặc tả 2 Ca sử dụng tiêu biểu
 
-```mermaid
-flowchart LR
-    subgraph SystemBoundary [" HỆ THỐNG QUẢN LÝ NHÀ HÀNG IT25 "]
-        direction TB
-        UC1(["Quản lý thực đơn (Đồ ăn, Đồ uống)"])
-        UC2(["Quản lý nhân viên"])
-        UC3(["Đặt bàn và đặt món trước"])
-        UC4(["Tiếp nhận gọi món tại bàn"])
-        UC5(["Điều chỉnh món ăn (Thêm, Xóa, Sửa)"])
-        UC6(["Thanh toán hóa đơn"])
-        UC7(["Kiểm toán & Đối soát tiền cuối ngày"])
-        UC8(["Xem báo cáo thống kê (Doanh thu, Món, Khách)"])
+### 1. Ca sử dụng: Tiếp nhận gọi món tại bàn (UC04)
 
-        UC5 -. "«extend»" .-> UC4
-        UC6 -. "«include»" .-> UC4
-    end
-
-    Customer(("Khách hàng"))
-    Cashier(("Nhân viên Thu ngân"))
-    Manager(("Quản lý nhà hàng"))
-
-    Customer --- UC3
-    Customer --- UC6
-
-    Cashier --- UC3
-    Cashier --- UC4
-    Cashier --- UC5
-    Cashier --- UC6
-    Cashier --- UC7
-
-    Manager --- UC1
-    Manager --- UC2
-    Manager --- UC7
-    Manager --- UC8
-```
-
----
-
-## II. Đặc tả 2 Ca sử dụng tiêu biểu (Use Case Specifications)
-
-### 1. Ca sử dụng 1: Tiếp nhận gọi món tại bàn (UC04)
-
-| Thuộc tính | Nội dung chi tiết |
+| Thuộc tính | Nội dung |
 |:---|:---|
-| **Tên Ca sử dụng** | **Tiếp nhận gọi món tại bàn** |
-| **Mã Ca sử dụng** | **UC04** |
+| **Tên ca sử dụng** | Tiếp nhận gọi món tại bàn |
+| **Mã** | UC04 |
 | **Tác nhân chính** | Nhân viên thu ngân |
-| **Mục tiêu** | Tiếp nhận thông tin khách đến dùng bữa, ghi nhận số bàn, danh sách món ăn, đồ uống và các ghi chú phục vụ vào hệ thống. |
-| **Tiền điều kiện** | 1. Nhân viên thu ngân đã đăng nhập vào hệ thống.<br>2. Bàn ăn được chọn đang ở trạng thái trống (hoặc bàn đã đặt trước).<br>3. Danh mục thực đơn (đồ ăn, thức uống) đã có sẵn dữ liệu. |
-| **Hậu điều kiện** | 1. Phiếu gọi món (Hóa đơn tạm) được khởi tạo thành công với mã định danh duy nhất.<br>2. Trạng thái bàn ăn tự động chuyển sang "Đang phục vụ".<br>3. Danh sách món ăn được chuyển xuống khu vực bếp / quầy pha chế. |
-| **Luồng sự kiện chính (Basic Flow)** | 1. Thu ngân chọn chức năng **Tiếp nhận gọi món / Mở bàn** trên giao diện hệ thống.<br>2. Thu ngân nhập số bàn, tên khách hàng và ghi chú chung (nếu có).<br>3. Hệ thống tự động ghi nhận thời gian bắt đầu gọi món.<br>4. Thu ngân chọn các món ăn, đồ uống theo yêu cầu của khách từ thực đơn, nhập số lượng và ghi chú từng món (ví dụ: "ít cay", "không đường").<br>5. Hệ thống tự động tính thành tiền tạm tính cho từng món và tổng số tiền của đơn hàng.<br>6. Thu ngân xác nhận lưu đơn gọi món.<br>7. Hệ thống cập nhật trạng thái bàn sang "Đang phục vụ", lưu dữ liệu hóa đơn và in phiếu order chuyển bếp/pha chế. |
-| **Luồng rẽ nhánh / Ngoại lệ (Alternative Flows)** | **2a. Bàn đã có khách đang ngồi:** Hệ thống đưa ra thông báo bàn đang bận và hỏi thu ngân có muốn gộp bàn hoặc chọn bàn khác không.<br>**4a. Món ăn trong thực đơn đã hết nguyên liệu:** Hệ thống hiển thị cảnh báo món đã tạm ngừng phục vụ để thu ngân thông báo lại cho khách đổi món.<br>**4b. Khách thay đổi ý định (Thêm, Xóa, Sửa món):** Kích hoạt ca sử dụng mở rộng `UC05 (Điều chỉnh món ăn)`, hệ thống cập nhật lại danh sách món và điều chỉnh tổng tiền tạm tính. |
+| **Mục tiêu** | Ghi nhận thông tin khách và danh sách món ăn vào hệ thống khi khách đến dùng bữa. |
+| **Tiền điều kiện** | Thu ngân đã đăng nhập; bàn được chọn đang trống; thực đơn đã có dữ liệu. |
+| **Hậu điều kiện** | Hóa đơn tạm được tạo; trạng thái bàn → "Đang phục vụ"; phiếu order được in chuyển bếp. |
+| **Luồng chính** | 1. Thu ngân chọn **Mở bàn / Tiếp nhận gọi món**.<br>2. Nhập số bàn, tên khách, giờ gọi món và ghi chú chung.<br>3. Hệ thống tự ghi nhận thời gian bắt đầu.<br>4. Thu ngân chọn món từ thực đơn, nhập số lượng, ghi chú riêng từng món.<br>5. Hệ thống tính tạm tính từng món và tổng tiền.<br>6. Thu ngân xác nhận lưu đơn.<br>7. Hệ thống cập nhật trạng thái bàn, lưu hóa đơn, in phiếu order. |
+| **Luồng ngoại lệ** | **2a.** Bàn đã có khách: hệ thống cảnh báo, không cho mở bàn trùng.<br>**4a.** Món hết: hệ thống thông báo, thu ngân chọn món khác. |
+| **Quan hệ** | UC05 (Điều chỉnh món ăn) **«extend»** UC04 — khi khách muốn thêm/xóa/sửa món. |
 
 ---
 
-### 2. Ca sử dụng 2: Kiểm toán và đối soát tiền cuối ngày (UC07)
+### 2. Ca sử dụng: Thanh toán hóa đơn (UC06)
 
-| Thuộc tính | Nội dung chi tiết |
+| Thuộc tính | Nội dung |
 |:---|:---|
-| **Tên Ca sử dụng** | **Kiểm toán và đối soát tiền cuối ngày** |
-| **Mã Ca sử dụng** | **UC07** |
-| **Tác nhân chính** | Nhân viên thu ngân, Quản lý nhà hàng |
-| **Mục tiêu** | Kết ca làm việc, đối soát số tiền thu được thực tế (tiền mặt và chuyển khoản ngân hàng) với dữ liệu doanh thu trên hệ thống, lập biên bản kiểm toán nộp cho quản lý. |
-| **Tiền điều kiện** | 1. Đã hết ca làm việc hoặc cuối ngày, toàn bộ các bàn trong ca đã hoàn tất thanh toán.<br>2. Nhân viên thu ngân đã kiểm đếm tổng số tiền mặt thực tế trong két. |
-| **Hậu điều kiện** | 1. Biên bản kiểm toán ca được lập và lưu trữ trong hệ thống.<br>2. Trạng thái ca thu ngân được đóng.<br>3. Quản lý xác nhận số tiền thực tế bàn giao và ký duyệt biên bản. |
-| **Luồng sự kiện chính (Basic Flow)** | 1. Thu ngân chọn chức năng **Kiểm toán cuối ngày / Kết ca** trên hệ thống.<br>2. Hệ thống tự động quét toàn bộ các hóa đơn đã thanh toán trong ngày/ca, tính toán và xuất số liệu:<br>&nbsp;&nbsp;&nbsp;&nbsp;- Tổng tiền mặt trên hệ thống ghi nhận.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Tổng tiền chuyển khoản qua ngân hàng ghi nhận.<br>&nbsp;&nbsp;&nbsp;&nbsp;- Tổng doanh thu ghi nhận của ca.<br>3. Thu ngân đếm tiền mặt thực tế trong két và nhập con số thực tế vào biểu mẫu kiểm toán.<br>4. Hệ thống thực hiện đối chiếu:  
-$$\text{Chênh lệch} = \text{Tiền thực tế} - \text{Tiền hệ thống}$$  
-5. Hệ thống hiển thị kết quả đối soát (Khớp tiền / Thừa tiền / Thiếu tiền). Thu ngân nhập ghi chú giải trình nếu có sai lệch.<br>6. Thu ngân xác nhận lập biên bản kiểm toán.<br>7. Quản lý nhà hàng kiểm tra lại số tiền bàn giao, đối chiếu sao kê ngân hàng và bấm nút **"Xác nhận duyệt nộp tiền"** để hoàn tất đóng ca. |
-| **Luồng rẽ nhánh / Ngoại lệ (Alternative Flows)** | **2a. Vẫn còn bàn chưa thanh toán:** Hệ thống từ chối kết ca và cảnh báo thu ngân phải hoàn tất hoặc chuyển giao các bàn còn mở trước khi kiểm toán.<br>**4a. Xuất hiện chênh lệch tiền:** Nếu tiền thực tế lệch so với hệ thống (thừa hoặc thiếu), hệ thống đánh dấu cờ cảnh báo màu đỏ, bắt buộc thu ngân và quản lý phải ghi rõ nguyên nhân vào biên bản giải trình trước khi duyệt. |
+| **Tên ca sử dụng** | Thanh toán hóa đơn |
+| **Mã** | UC06 |
+| **Tác nhân chính** | Nhân viên thu ngân |
+| **Tác nhân phụ** | Khách hàng |
+| **Mục tiêu** | Thực hiện thu tiền và đóng hóa đơn sau khi khách dùng bữa xong. |
+| **Tiền điều kiện** | Hóa đơn của bàn đang ở trạng thái "Chờ thanh toán"; thu ngân đã đăng nhập. |
+| **Hậu điều kiện** | Hóa đơn được đánh dấu "Đã thanh toán"; trạng thái bàn → "Trống"; dữ liệu doanh thu được cập nhật. |
+| **Luồng chính** | 1. Thu ngân chọn bàn, chọn chức năng **Thanh toán**.<br>2. Hệ thống hiển thị chi tiết hóa đơn và tổng tiền.<br>3. Khách xác nhận tổng tiền.<br>4. Thu ngân chọn hình thức thanh toán (Tiền mặt / Chuyển khoản).<br>5a. *Tiền mặt:* Khách đưa tiền → thu ngân kiểm đếm, thối tiền thừa.<br>5b. *Chuyển khoản:* Khách quét QR / chuyển khoản → hệ thống xác nhận tự động.<br>6. Hệ thống cập nhật trạng thái hóa đơn, in hóa đơn chính thức.<br>7. Thu ngân đưa hóa đơn cho khách. |
+| **Luồng ngoại lệ** | **3a.** Khách phản đối tổng tiền: thu ngân kiểm tra lại từng món, chỉnh sửa nếu cần.<br>**5b-err.** Chuyển khoản thất bại: hệ thống cảnh báo, chờ khách thử lại hoặc đổi hình thức. |
+| **Quan hệ** | UC06 **«include»** UC06a (Thanh toán tiền mặt) HOẶC UC06b (Thanh toán chuyển khoản) — bắt buộc phải chọn 1 trong 2 hình thức. |
 
 ---
 
 ## III. Sơ đồ Lớp (Class Diagram)
 
-### 1. Sơ đồ Mermaid Class Diagram
+### 1. Sơ đồ tổng quát (1 ngăn — tên lớp + quan hệ + bội số)
 
-```mermaid
-classDiagram
-    direction TB
+> Quan hệ n-n giữa HoaDon và MonAn được tách thành 2 quan hệ 1-n qua lớp kết hợp **ChiTietHoaDon**.
 
-    class NhanVien {
-        #maNV: String
-        #tenNV: String
-        #gioiTinh: String
-        #ngaySinh: Date
-        #sdt: String
-        #email: String
-        #diaChi: String
-        +hienThiThongTin(): void
-    }
+![Sơ đồ Class tổng quát](class-overview.png)
 
-    class ThuNgan {
-        -caLamViec: String
-        +tiepNhanGoiMon(): void
-        +dieuChinhMon(): void
-        +thanhToanHoaDon(): void
-        +kiemToanCuoiNgay(): void
-    }
+### 2. Sơ đồ chi tiết từng lớp (3 ngăn: tên — thuộc tính — phương thức)
 
-    class QuanLy {
-        -heSoLuong: double
-        +quanLyThucDon(): void
-        +quanLyNhanVien(): void
-        +xacNhanKiemToan(): void
-        +xemBaoCaoThongKe(): void
-    }
-
-    class MonAn {
-        <<Abstract>>
-        #maMon: String
-        #tenMon: String
-        #donGia: double
-        #dvt: String
-        #moTa: String
-        #ghiChu: String
-        +hienThiThongTin(): void
-    }
-
-    class DoAn {
-        -loaiCheBien: String
-        -coMonKem: boolean
-    }
-
-    class DoUong {
-        -coCon: boolean
-        -nhietDoUong: String
-    }
-
-    class BanAn {
-        -soBan: int
-        -sucChua: int
-        -trangThai: String
-        +capNhatTrangThai(String): void
-    }
-
-    class KhachHang {
-        -maKH: String
-        -tenKH: String
-        -sdt: String
-        +datBanTruoc(): void
-    }
-
-    class HoaDon {
-        -maHD: String
-        -gioGoiMon: Date
-        -gioThanhToan: Date
-        -phuongThucTT: String
-        -trangThai: String
-        -ghiChu: String
-        +tinhTongTien(): double
-        +inHoaDon(): void
-    }
-
-    class ChiTietHoaDon {
-        <<Association Class>>
-        -soLuong: int
-        -donGiaTaiThoiDiemGoi: double
-        -ghiChuMon: String
-        +tinhThanhTien(): double
-    }
-
-    class PhieuKiemToan {
-        -maKiemToan: String
-        -ngayKiemToan: Date
-        -tongTienHeThong: double
-        -tongTienThucTe: double
-        -chenhLech: double
-        -trangThaiDuyet: boolean
-        -ghiChu: String
-        +tinhChenhLech(): double
-    }
-
-    NhanVien <|-- ThuNgan : Kế thừa (Generalization)
-    NhanVien <|-- QuanLy : Kế thừa (Generalization)
-
-    MonAn <|-- DoAn : Kế thừa (Generalization)
-    MonAn <|-- DoUong : Kế thừa (Generalization)
-
-    KhachHang "0..1" --> "0..*" HoaDon : Đặt món / Thanh toán
-    BanAn "1" --> "0..*" HoaDon : Phục vụ tại bàn
-    ThuNgan "1" --> "0..*" HoaDon : Lập & Thu tiền
-
-    ThuNgan "1" --> "0..*" PhieuKiemToan : Lập biên bản
-    QuanLy "1" --> "0..*" PhieuKiemToan : Ký duyệt nhận tiền
-
-    HoaDon "1" *-- "1..*" ChiTietHoaDon : Composition
-    MonAn "1" -- "0..*" ChiTietHoaDon : Gắn với
-```
-
-### 2. Mô tả các Thực thể chính trong Sơ đồ Lớp
-1. **Lớp trừu tượng `MonAn` (Abstract Class):** Chứa các thuộc tính chung của thực đơn (`maMon`, `tenMon`, `donGia`, `dvt`, `moTa`, `ghiChu`). Hai lớp con `DoAn` và `DoUong` kế thừa để mở rộng đặc tính phân loại.
-2. **Lớp `NhanVien`:** Quản lý thông tin nhân sự. Các lớp con `ThuNgan` và `QuanLy` kế thừa và đảm nhiệm các chức năng nghiệp vụ riêng biệt.
-3. **Lớp `BanAn`:** Quản lý số bàn và trạng thái bàn (Trống, Đang phục vụ, Đã đặt).
-4. **Lớp `HoaDon`:** Lưu trữ thông tin giao dịch tổng thể của một bàn ăn (giờ vào, giờ thanh toán, hình thức thanh toán tiền mặt/ngân hàng, tổng tiền).
-5. **Lớp `PhieuKiemToan`:** Phục vụ nghiệp vụ đối soát tài chính cuối ngày giữa Thu ngân và Quản lý.
+![Sơ đồ Class chi tiết](class-detail.png)
 
 ---
 
-## IV. Phân tích và Giải thích Lớp Kết Hợp (Association Class)
+## IV. Phân tích Lớp Kết Hợp (Association Class): `ChiTietHoaDon`
 
-### 1. Khái niệm Lớp Kết Hợp (Association Class) trong UML
-Lớp kết hợp là một lớp đặc biệt vừa đóng vai trò là một **mối liên kết (Association)** kết nối giữa hai lớp khác nhau, vừa đóng vai trò là một **lớp độc lập (Class)** sở hữu các thuộc tính và phương thức riêng. Lớp kết hợp thường xuất hiện khi có quan hệ nhiều - nhiều ($N - N$) giữa hai thực thể mà bản thân mối quan hệ đó sinh ra các dữ liệu nghiệp vụ không thể gán vào lớp cha nào.
+### Khái niệm
+Lớp kết hợp là lớp vừa đóng vai trò **mối liên kết** giữa hai lớp, vừa là **lớp độc lập** có thuộc tính và phương thức riêng. Xuất hiện khi quan hệ n-n giữa hai thực thể tự sinh ra dữ liệu không thuộc về bên nào.
 
-### 2. Lớp kết hợp trong hệ thống Nhà hàng IT25: `ChiTietHoaDon`
-Trong bài toán nhà hàng, giữa lớp **`HoaDon`** và lớp **`MonAn`** tồn tại mối quan hệ nhiều - nhiều ($N - N$):
-* Một Hóa đơn (`HoaDon`) có thể bao gồm **nhiều Món ăn** (`MonAn`).
-* Một Món ăn (`MonAn`) có thể được gọi trong **nhiều Hóa đơn** khác nhau của các khách hàng khác nhau.
+### Phân tích trong hệ thống Nhà hàng IT25
 
-Mối liên kết giữa một Hóa đơn cụ thể và một Món ăn cụ thể làm phát sinh các thông tin nghiệp vụ:
-* Khách gọi món này với **số lượng bao nhiêu**?
-* **Đơn giá tại thời điểm gọi** là bao nhiêu?
-* Khách có **yêu cầu ghi chú chế biến riêng** cho món đó không (ví dụ: *"cho ít đường"*, *"không ớt"*...)?
+Giữa **`HoaDon`** và **`MonAn`** tồn tại quan hệ n-n:
+- Một hóa đơn chứa **nhiều món ăn**.
+- Một món ăn có thể xuất hiện trong **nhiều hóa đơn** khác nhau.
 
-### 3. Vì sao bắt buộc phải sử dụng Lớp Kết Hợp `ChiTietHoaDon`?
-1. **Không thể đặt thuộc tính `soLuong` hay `ghiChuMon` vào lớp `MonAn`:**  
-   Bởi vì món ăn là dữ liệu dùng chung trong toàn bộ thực đơn của nhà hàng (ví dụ: món "Cà phê sữa" có đơn giá 25.000 VNĐ). Thực đơn không thể lưu trữ số lượng khách gọi là bao nhiêu, vì mỗi bàn khách gọi số lượng hoàn toàn khác nhau.
-2. **Không thể đặt thuộc tính `soLuong` hay `donGiaTaiThoiDiemGoi` vào lớp `HoaDon`:**  
-   Bởi vì một hóa đơn có thể có tới 10 món ăn khác nhau. Nếu đặt thuộc tính trong `HoaDon`, hóa đơn không thể biết số lượng hay đơn giá đó là thuộc về món ăn cụ thể nào nếu không có cấu trúc danh sách chi tiết.
-3. **Bảo toàn lịch sử giá bán:**  
-   Đơn giá thực đơn có thể thay đổi theo thời gian. Thuộc tính `donGiaTaiThoiDiemGoi` trong lớp kết hợp giúp lưu vết chính xác mức giá tại ngày giờ khách dùng bữa, đảm bảo tính đúng đắn khi xuất hóa đơn và kiểm toán sau này.
+Mối liên kết này tự sinh ra các dữ liệu:
+- **Số lượng** suất khách gọi (không thể lưu trong `MonAn` vì mỗi bàn gọi khác nhau).
+- **Đơn giá tại thời điểm gọi** (giá thực đơn có thể thay đổi, cần lưu vết).
+- **Ghi chú chế biến riêng** cho từng món của từng khách (ví dụ: "ít đường", "không cay").
 
-### 4. Cấu trúc chi tiết của Lớp Kết Hợp `ChiTietHoaDon`:
-* **Thuộc tính:**
-  * `- soLuong: int`: Số lượng suất/phần ăn khách gọi.
-  * `- donGiaTaiThoiDiemGoi: double`: Đơn giá món tại thời điểm gọi.
-  * `- ghiChuMon: String`: Ghi chú chế biến riêng của khách cho món này (VD: "Ít đường", "Không cay").
-* **Phương thức:**
-  * `+ tinhThanhTien(): double`:  
-    $$\text{Thành tiền} = \text{soLuong} \times \text{donGiaTaiThoiDiemGoi}$$
+### Vì sao bắt buộc dùng lớp kết hợp?
+
+| Nếu đặt vào `MonAn` | Nếu đặt vào `HoaDon` | Giải pháp đúng |
+|:---|:---|:---|
+| `MonAn` là dữ liệu dùng chung toàn thực đơn → không biết bàn nào gọi bao nhiêu | Một hóa đơn có nhiều món → không rõ `soLuong` thuộc món nào | Tạo lớp kết hợp `ChiTietHoaDon` lưu riêng từng dòng (maHD + maMon + soLuong + donGia + ghiChu) |
+
+### Cấu trúc lớp `ChiTietHoaDon`
+
+**Thuộc tính:**
+- `- maHD: String` — Khóa ngoại tham chiếu HoaDon
+- `- maMon: String` — Khóa ngoại tham chiếu MonAn
+- `- soLuong: int` — Số suất khách gọi
+- `- donGiaTaiThoiDiemGoi: double` — Giá tại thời điểm đặt món
+- `- ghiChuMon: String` — Yêu cầu chế biến riêng
+
+**Phương thức:**
+- `+ tinhThanhTien(): double` — Tính: `soLuong × donGiaTaiThoiDiemGoi`
+- `+ getSoLuong(): int`
+- `+ getGhiChuMon(): String`
+
+---
+
+## V. Sơ đồ Hoạt động (Activity Diagram)
+
+> **Quá trình được chọn:** Thanh toán hóa đơn (UC06)  
+> Sơ đồ có **swim lanes** (làn bơi): Khách hàng | Nhân viên Thu ngân | Hệ thống  
+> Ký hiệu: ● Start (tròn đen) — ⊙ End (tròn đen trong vòng tròn)
+
+![Sơ đồ Activity - Thanh toán hóa đơn](activity-thanhtoanhoadon.png)
+
+---
+
+## VI. Sơ đồ Tuần tự (Sequence Diagram)
+
+> **Quá trình được chọn:** Tiếp nhận gọi món tại bàn (UC04)  
+> Các đối tượng được biểu diễn theo định dạng: **`tênĐốiTượng : TênLớp`**
+
+![Sơ đồ Sequence - Tiếp nhận gọi món](sequence-goimon.png)
+
+**Các thông điệp chính:**
+
+| STT | Từ | Đến | Thông điệp | Ý nghĩa |
+|:---:|:---|:---|:---|:---|
+| 1 | `thuNgan` | `giaoDien` | `chonChucNangGoiMon()` | Kích hoạt màn hình tiếp nhận |
+| 2 | `giaoDien` | `heThong` | `kiemTraBan(soBan)` | Hệ thống kiểm tra trạng thái bàn |
+| 3 | `heThong` | `ban` | `getTrangThai()` | Lấy trạng thái hiện tại của bàn |
+| 4 | `giaoDien` | `heThong` | `themMonVaoDon(maMon, soLuong)` | Thêm món vào đơn hàng |
+| 5 | `heThong` | `hd` | `new HoaDon(soBan, tenKhach, thoiGian)` | Khởi tạo hóa đơn mới |
+| 6 | `heThong` | `chiTiet` | `new ChiTietHD(maHD, maMon, soLuong, ghiChu)` | Tạo dòng chi tiết hóa đơn |
+| 7 | `heThong` | `ban` | `setTrangThai("DangPhucVu")` | Cập nhật bàn sang đang phục vụ |
+
+---
+
+## VII. Sơ đồ Trạng thái (State Diagram)
+
+> **Đối tượng được chọn:** `hoaDon : HoaDon` — Hóa đơn trong hệ thống Nhà hàng IT25  
+> Sơ đồ mô tả vòng đời của một hóa đơn từ khi khách đến đến khi thanh toán xong.
+
+![Sơ đồ State - Hóa đơn](state-hoadon.png)
+
+**Các trạng thái:**
+
+| Trạng thái | Mô tả |
+|:---|:---|
+| **Đã đặt bàn trước** | Khách đặt qua điện thoại/online, hóa đơn được tạo trước |
+| **Mở bàn (Đang phục vụ)** | Khách đến, bàn được mở, bắt đầu gọi món |
+| **Đang gọi món** | Thu ngân đang nhập món, có thể thêm/xóa/sửa |
+| **Chờ thanh toán** | Khách gọi xong, yêu cầu thanh toán |
+| **Đã thanh toán** | Thanh toán thành công, hóa đơn đóng |
+| **Đã hủy** | Hóa đơn bị hủy do sự cố hoặc khách rời đi |
