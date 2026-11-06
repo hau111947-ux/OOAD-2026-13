@@ -80,64 +80,7 @@ Trong hệ thống quản lý nhà xe, thực thể `XeOToDien` đóng vai trò 
 
 ### 2. Sơ đồ Trạng thái (State Diagram)
 
-```mermaid
-stateDiagram-v2
-    [*] --> Ranh: Tiếp nhận xe vào bãi [Pin >= 50%]
-
-    state Ranh {
-        entry / kiemTraPinVaVeSinh()
-        do / hienThiTrangThai("Sẵn sàng")
-    }
-
-    state DangChoThue {
-        entry / khoaTrangThaiXe(), banGiao()
-        do / giamSatHanhTrinh()
-        exit / moKhoaXe()
-    }
-
-    state NghiemThu {
-        entry / docPhanTramPin(), docOdo()
-        do / tinhToanChiPhiThue()
-    }
-
-    state PinYeu {
-        entry / phatTinHieuCanhBaoPin()
-        do / dieuPhoiVaoKhuVucSac()
-    }
-
-    state DangSac {
-        entry / ketNoiTruSac(), khoiTaoPhienSac()
-        do / moPhongNapDien(), doLuongKWh()
-        exit / ngatTruSac(), chotChiPhiDien()
-    }
-
-    state BaoTri {
-        entry / lapPhieuKyThuat()
-        do / kiemDinhCellPinVaBaoDuong()
-    }
-
-    state NgungKhaiThac {
-        entry / lapBienBanThanhLy()
-    }
-
-    Ranh --> DangChoThue: lapHopDongThue() [coTheThue() == true] / capNhatTrangThai(1)
-    DangChoThue --> NghiemThu: khachTraXe() / ghiNhanThoiGianTra()
-
-    NghiemThu --> Ranh: thanhToanXong() [Pin >= 50%] / veSinhVaDuaVeBai()
-    NghiemThu --> DangSac: thanhToanXong() [20% <= Pin < 50%] / duaVaoTruSac()
-    NghiemThu --> PinYeu: thanhToanXong() [Pin < 20%] / kichHoatCanhBaoKhanCap()
-
-    PinYeu --> DangSac: camVaoTruSac() / batDauPhienSac()
-    DangSac --> Ranh: hoanTatSac() [Pin >= 80%] / capNhatPinMoi()
-
-    Ranh --> BaoTri: phatHienSuCo() / chuyenVaoXuong()
-    DangChoThue --> BaoTri: gapSuCoKyThuatTrenDuong() / cuXeCuuHo()
-    BaoTri --> DangSac: suaChuaXong() [Pin < 50%] / chuyenSangNapPin()
-    BaoTri --> Ranh: baoDuongXong() [Pin >= 50%] / kiemDinhDat()
-
-    BaoTri --> NgungKhaiThac: khongThePhucHoi() / hetNienHan()
-    NgungKhaiThac --> [*]
-```
+![Sơ đồ Trạng thái - Xe Ô Tô Điện](state-diagram-xe.png)
 
 ### 3. Bảng giải thích chi tiết các Trạng thái và Sự kiện chuyển đổi
 
@@ -166,38 +109,7 @@ Biểu đồ Hoạt động mô tả luồng xử lý nghiệp vụ của ca s�
 
 ### 2. Sơ đồ Hoạt động (Activity Diagram)
 
-```mermaid
-flowchart TD
-    Start(["● Bắt đầu"]) --> A[Nhân viên chọn chức năng\nLập hợp đồng cho thuê xe]
-    A --> B[Nhập mã khách hàng\nhoặc số CCCD]
-    B --> C{Khách hàng\ntồn tại trong hệ thống?}
-
-    C -- Không --> D[Thông báo: Không tìm thấy hồ sơ\nYêu cầu tạo mới hồ sơ khách hàng]
-    D --> E[Nhân viên tạo mới\nhồ sơ khách hàng]
-    E --> B
-
-    C -- Có --> F{Giấy phép lái xe\nhợp lệ?}
-    F -- Không --> G[Thông báo: GPLX không hợp lệ\nTừ chối giao dịch]
-    G --> End1(["⊙ Kết thúc - Thất bại"])
-
-    F -- Có --> H[Nhân viên nhập mã xe\nkhách hàng yêu cầu thuê]
-    H --> I{Xe tồn tại và\nđang ở trạng thái Rảnh?}
-
-    I -- Không --> J[Thông báo: Xe không khả dụng\nYêu cầu chọn xe khác]
-    J --> H
-
-    I -- Có --> K{Kiểm tra mức pin\nPin >= 50%?}
-
-    K -- Không --> L[Thông báo: Pin xe dưới 50%\nKhông đủ điều kiện xuất xưởng\nVui lòng chọn xe khác hoặc sạc thêm]
-    L --> H
-
-    K -- Có --> M[Nhân viên nhập số ngày thuê\nvà đơn giá thuê mỗi ngày]
-    M --> N[Hệ thống tự động ghi nhận:\nThời gian bắt đầu thuê\n% Pin ban đầu lúc bàn giao\nTổng tiền dự kiến]
-    N --> O[Hệ thống tạo mã hợp đồng\nvà lưu vào cơ sở dữ liệu]
-    O --> P[Hệ thống tự động cập nhật\ntrạng thái xe sang Đang cho thuê]
-    P --> Q[Xuất thông báo xác nhận\nvà hiển thị hợp đồng]
-    Q --> End2(["⊙ Kết thúc - Thành công"])
-```
+![Sơ đồ Hoạt động - Lập hợp đồng cho thuê xe](activity-diagram-xe.png)
 
 ### 3. Giải thích các điểm quyết định chính (Decision Points)
 
@@ -218,49 +130,7 @@ Biểu đồ Tuần tự mô tả chi tiết trình tự trao đổi thông đi�
 
 ### 2. Sơ đồ Tuần tự (Sequence Diagram)
 
-```mermaid
-sequenceDiagram
-    actor NV as Nhân viên
-    participant UI as Giao diện Hệ thống
-    participant HC as QuanLyHopDong
-    participant KH as KhachHang
-    participant Xe as XeOToDien
-    participant HD as HopDongThueXe
-
-    NV ->> UI: Chọn chức năng Lập hợp đồng thuê xe
-    UI ->> NV: Hiển thị biểu mẫu nhập thông tin
-
-    NV ->> UI: Nhập mã khách hàng hoặc số CCCD
-    UI ->> HC: timKhachHangTheoMa(maKH)
-    HC ->> KH: invalidInfo()
-    KH -->> HC: false (Thông tin hợp lệ)
-    HC -->> UI: Xác nhận hồ sơ khách hàng hợp lệ
-    UI -->> NV: Hiển thị thông tin khách hàng
-
-    NV ->> UI: Nhập mã xe muốn thuê
-    UI ->> HC: timXeTheoMa(maXe)
-    HC ->> Xe: getTrangThai()
-    Xe -->> HC: 0 (Đang Rảnh)
-    HC ->> Xe: coTheThue()
-    Xe -->> HC: true (Pin >= 50% và đang Rảnh)
-    HC -->> UI: Xác nhận xe đủ điều kiện xuất xưởng
-    UI -->> NV: Hiển thị thông tin xe và mức pin hiện tại
-
-    NV ->> UI: Nhập số ngày thuê và đơn giá
-    UI ->> HC: lapHopDong(khachHang, xe, soNgay, donGia)
-
-    HC ->> Xe: getPhanTramPinHienTai()
-    Xe -->> HC: mucPinGiao (ví dụ: 85%)
-
-    HC ->> HD: new HopDongThueXe(maHD, maKH, maXe, ngayBD, ngayKT, donGia, mucPinGiao)
-    HD -->> HC: hopDong (tạo thành công)
-
-    HC ->> Xe: setTrangThai(DANG_THUE)
-    Xe -->> HC: Cập nhật trạng thái thành công
-
-    HC -->> UI: Trả về hopDong (thành công)
-    UI -->> NV: Hiển thị xác nhận và in hợp đồng
-```
+![Sơ đồ Tuần tự - Lập hợp đồng cho thuê xe](sequence-diagram-xe.png)
 
 ### 3. Giải thích các thông điệp quan trọng
 
